@@ -173,6 +173,44 @@
 <span id="173">173</span>
 <span id="174">174</span>
 <span id="175">175</span>
+<span id="176">176</span>
+<span id="177">177</span>
+<span id="178">178</span>
+<span id="179">179</span>
+<span id="180">180</span>
+<span id="181">181</span>
+<span id="182">182</span>
+<span id="183">183</span>
+<span id="184">184</span>
+<span id="185">185</span>
+<span id="186">186</span>
+<span id="187">187</span>
+<span id="188">188</span>
+<span id="189">189</span>
+<span id="190">190</span>
+<span id="191">191</span>
+<span id="192">192</span>
+<span id="193">193</span>
+<span id="194">194</span>
+<span id="195">195</span>
+<span id="196">196</span>
+<span id="197">197</span>
+<span id="198">198</span>
+<span id="199">199</span>
+<span id="200">200</span>
+<span id="201">201</span>
+<span id="202">202</span>
+<span id="203">203</span>
+<span id="204">204</span>
+<span id="205">205</span>
+<span id="206">206</span>
+<span id="207">207</span>
+<span id="208">208</span>
+<span id="209">209</span>
+<span id="210">210</span>
+<span id="211">211</span>
+<span id="212">212</span>
+<span id="213">213</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="attribute">#[<span class="ident">macro_use</span>]</span>
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">test_utils</span>; <span class="comment">// this **must** be first since macro import order matters!</span>
@@ -269,29 +307,47 @@
     );
 
     <span class="kw">fn</span> <span class="ident">num_term</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Rc</span><span class="op">&lt;</span><span class="self">Self</span>::<span class="ident">Expr</span><span class="op">&gt;</span> {
-        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="prelude-val">Ok</span>(<span class="ident">op</span>)) <span class="op">=</span> <span class="self">self</span>.<span class="ident">input</span>().<span class="ident">peek</span>().<span class="ident">map</span>(<span class="ident">UnaryOperator</span>::<span class="ident">try_from</span>) {
+        <span class="kw">let</span> <span class="ident">node</span> <span class="op">=</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="prelude-val">Ok</span>(<span class="ident">op</span>)) <span class="op">=</span> <span class="self">self</span>.<span class="ident">input</span>().<span class="ident">peek</span>().<span class="ident">map</span>(<span class="ident">UnaryOperator</span>::<span class="ident">try_from</span>) {
             <span class="self">self</span>.<span class="ident">input</span>().<span class="ident">next</span>();
-            <span class="kw">let</span> <span class="ident">node</span> <span class="op">=</span> <span class="ident">UnaryExpr</span> {
+            <span class="ident">UnaryExpr</span> {
                 <span class="ident">op</span>,
                 <span class="ident">rhs</span>: <span class="self">self</span>.<span class="ident">exp_term</span>(),
             }
-            .<span class="ident">into</span>();
-            <span class="kw">return</span> <span class="self">self</span>.<span class="ident">finish_expr</span>(<span class="ident">node</span>);
+            .<span class="ident">into</span>()
+        } <span class="kw">else</span> {
+            <span class="kw">let</span> <span class="ident">node</span> <span class="op">=</span> <span class="kw">match</span> <span class="self">self</span>.<span class="ident">input</span>().<span class="ident">peek</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">t</span><span class="op">|</span> <span class="ident">t</span>.<span class="ident">ty</span>.<span class="ident">clone</span>()) {
+                <span class="prelude-val">Some</span>(<span class="ident">TokenType</span>::<span class="ident">Float</span>(<span class="ident">f</span>)) <span class="op">=</span><span class="op">&gt;</span> <span class="self">self</span>.<span class="ident">parse_float</span>(<span class="ident">f</span>),
+                <span class="prelude-val">Some</span>(<span class="ident">TokenType</span>::<span class="ident">Variable</span>(<span class="ident">name</span>)) <span class="op">=</span><span class="op">&gt;</span> <span class="self">self</span>.<span class="ident">parse_variable</span>(<span class="ident">name</span>),
+
+                <span class="prelude-val">Some</span>(<span class="ident">TokenType</span>::<span class="ident">VariablePattern</span>(<span class="ident">name</span>)) <span class="op">=</span><span class="op">&gt;</span> <span class="self">self</span>.<span class="ident">parse_var_pattern</span>(<span class="ident">name</span>),
+                <span class="prelude-val">Some</span>(<span class="ident">TokenType</span>::<span class="ident">ConstPattern</span>(<span class="ident">name</span>)) <span class="op">=</span><span class="op">&gt;</span> <span class="self">self</span>.<span class="ident">parse_const_pattern</span>(<span class="ident">name</span>),
+                <span class="prelude-val">Some</span>(<span class="ident">TokenType</span>::<span class="ident">AnyPattern</span>(<span class="ident">name</span>)) <span class="op">=</span><span class="op">&gt;</span> <span class="self">self</span>.<span class="ident">parse_any_pattern</span>(<span class="ident">name</span>),
+
+                <span class="prelude-val">Some</span>(<span class="ident">TokenType</span>::<span class="ident">OpenParen</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="self">self</span>.<span class="ident">parse_open_paren</span>(),
+                <span class="prelude-val">Some</span>(<span class="ident">TokenType</span>::<span class="ident">OpenBracket</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="self">self</span>.<span class="ident">parse_open_brace</span>(),
+                <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">unreachable</span><span class="macro">!</span>(),
+            };
+            <span class="self">self</span>.<span class="ident">input</span>().<span class="ident">next</span>(); <span class="comment">// eat rest of created expression</span>
+            <span class="ident">node</span>
+        };
+
+        <span class="kw">match</span> <span class="self">self</span>.<span class="ident">input</span>().<span class="ident">peek</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">t</span><span class="op">|</span> <span class="kw-2">&amp;</span><span class="ident">t</span>.<span class="ident">ty</span>) {
+            <span class="comment">// &lt;node&gt;(&lt;other&gt;) =&gt; &lt;node&gt; * (&lt;other&gt;)</span>
+            <span class="prelude-val">Some</span>(<span class="ident">TokenType</span>::<span class="ident">OpenParen</span>) <span class="op">|</span> <span class="prelude-val">Some</span>(<span class="ident">TokenType</span>::<span class="ident">OpenBracket</span>) <span class="op">=</span><span class="op">&gt;</span> {
+                <span class="self">self</span>.<span class="ident">input</span>().<span class="ident">push_front</span>(<span class="ident">Token</span>::<span class="ident">new</span>(<span class="ident">TokenType</span>::<span class="ident">Mult</span>));
+            }
+            <span class="comment">// &lt;num&gt;&lt;var&gt; =&gt; &lt;num&gt; * &lt;var&gt;</span>
+            <span class="prelude-val">Some</span>(<span class="ident">TokenType</span>::<span class="ident">Variable</span>(<span class="kw">_</span>))
+            <span class="op">|</span> <span class="prelude-val">Some</span>(<span class="ident">TokenType</span>::<span class="ident">VariablePattern</span>(<span class="kw">_</span>))
+            <span class="op">|</span> <span class="prelude-val">Some</span>(<span class="ident">TokenType</span>::<span class="ident">ConstPattern</span>(<span class="kw">_</span>))
+            <span class="op">|</span> <span class="prelude-val">Some</span>(<span class="ident">TokenType</span>::<span class="ident">AnyPattern</span>(<span class="kw">_</span>))
+                <span class="kw">if</span> <span class="ident">node</span>.<span class="ident">is_const</span>() <span class="op">=</span><span class="op">&gt;</span>
+            {
+                <span class="self">self</span>.<span class="ident">input</span>().<span class="ident">push_front</span>(<span class="ident">Token</span>::<span class="ident">new</span>(<span class="ident">TokenType</span>::<span class="ident">Mult</span>))
+            }
+            <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> {}
         }
 
-        <span class="kw">let</span> <span class="ident">node</span> <span class="op">=</span> <span class="kw">match</span> <span class="self">self</span>.<span class="ident">input</span>().<span class="ident">peek</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">t</span><span class="op">|</span> <span class="ident">t</span>.<span class="ident">ty</span>.<span class="ident">clone</span>()) {
-            <span class="prelude-val">Some</span>(<span class="ident">TokenType</span>::<span class="ident">Float</span>(<span class="ident">f</span>)) <span class="op">=</span><span class="op">&gt;</span> <span class="self">self</span>.<span class="ident">parse_float</span>(<span class="ident">f</span>),
-            <span class="prelude-val">Some</span>(<span class="ident">TokenType</span>::<span class="ident">Variable</span>(<span class="ident">name</span>)) <span class="op">=</span><span class="op">&gt;</span> <span class="self">self</span>.<span class="ident">parse_variable</span>(<span class="ident">name</span>),
-
-            <span class="prelude-val">Some</span>(<span class="ident">TokenType</span>::<span class="ident">VariablePattern</span>(<span class="ident">name</span>)) <span class="op">=</span><span class="op">&gt;</span> <span class="self">self</span>.<span class="ident">parse_var_pattern</span>(<span class="ident">name</span>),
-            <span class="prelude-val">Some</span>(<span class="ident">TokenType</span>::<span class="ident">ConstPattern</span>(<span class="ident">name</span>)) <span class="op">=</span><span class="op">&gt;</span> <span class="self">self</span>.<span class="ident">parse_const_pattern</span>(<span class="ident">name</span>),
-            <span class="prelude-val">Some</span>(<span class="ident">TokenType</span>::<span class="ident">AnyPattern</span>(<span class="ident">name</span>)) <span class="op">=</span><span class="op">&gt;</span> <span class="self">self</span>.<span class="ident">parse_any_pattern</span>(<span class="ident">name</span>),
-
-            <span class="prelude-val">Some</span>(<span class="ident">TokenType</span>::<span class="ident">OpenParen</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="self">self</span>.<span class="ident">parse_open_paren</span>(),
-            <span class="prelude-val">Some</span>(<span class="ident">TokenType</span>::<span class="ident">OpenBracket</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="self">self</span>.<span class="ident">parse_open_brace</span>(),
-            <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">unreachable</span><span class="macro">!</span>(),
-        };
-        <span class="self">self</span>.<span class="ident">input</span>().<span class="ident">next</span>(); <span class="comment">// eat rest of created expression</span>
         <span class="self">self</span>.<span class="ident">finish_expr</span>(<span class="ident">node</span>)
     }
 }
@@ -299,54 +355,74 @@
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
 <span class="kw">mod</span> <span class="ident">tests</span> {
     <span class="macro">common_parser_tests</span><span class="macro">!</span> {
-        <span class="ident">addition</span>:                <span class="string">&quot;2 + 2&quot;</span>
-        <span class="ident">addition_nested</span>:         <span class="string">&quot;1 + 2 + 3&quot;</span>
-        <span class="ident">addition_sub_nested</span>:     <span class="string">&quot;1 + 2 - 3&quot;</span>
-        <span class="ident">subtraction</span>:             <span class="string">&quot;2 - 2&quot;</span>
-        <span class="ident">subtraction_nested</span>:      <span class="string">&quot;1 - 2 - 3&quot;</span>
-        <span class="ident">subtraction_add_nested</span>:  <span class="string">&quot;1 - 2 + 3&quot;</span>
-        <span class="ident">multiplication</span>:          <span class="string">&quot;2 * 2&quot;</span>
-        <span class="ident">multiplication_nested</span>:   <span class="string">&quot;1 * 2 * 3&quot;</span>
-        <span class="ident">division</span>:                <span class="string">&quot;2 / 2&quot;</span>
-        <span class="ident">division_nested</span>:         <span class="string">&quot;1 / 2 / 3&quot;</span>
-        <span class="ident">modulo</span>:                  <span class="string">&quot;2 % 5&quot;</span>
-        <span class="ident">modulo_nested</span>:           <span class="string">&quot;1 % 2 % 3&quot;</span>
-        <span class="ident">exponent</span>:                <span class="string">&quot;2 ^ 3&quot;</span>
-        <span class="ident">exponent_nested</span>:         <span class="string">&quot;1 ^ 2 ^ 3&quot;</span>
-        <span class="ident">precedence_plus_times</span>:   <span class="string">&quot;1 + 2 * 3&quot;</span>
-        <span class="ident">precedence_times_plus</span>:   <span class="string">&quot;1 * 2 + 3&quot;</span>
-        <span class="ident">precedence_plus_div</span>:     <span class="string">&quot;1 + 2 / 3&quot;</span>
-        <span class="ident">precedence_div_plus</span>:     <span class="string">&quot;1 / 2 + 3&quot;</span>
-        <span class="ident">precedence_plus_mod</span>:     <span class="string">&quot;1 + 2 % 3&quot;</span>
-        <span class="ident">precedence_mod_plus</span>:     <span class="string">&quot;1 % 2 + 3&quot;</span>
-        <span class="ident">precedence_minus_times</span>:  <span class="string">&quot;1 - 2 * 3&quot;</span>
-        <span class="ident">precedence_times_minus</span>:  <span class="string">&quot;1 * 2 - 3&quot;</span>
-        <span class="ident">precedence_minus_div</span>:    <span class="string">&quot;1 - 2 / 3&quot;</span>
-        <span class="ident">precedence_div_minus</span>:    <span class="string">&quot;1 / 2 - 3&quot;</span>
-        <span class="ident">precedence_minus_mod</span>:    <span class="string">&quot;1 - 2 % 3&quot;</span>
-        <span class="ident">precedence_mod_minus</span>:    <span class="string">&quot;1 % 2 - 3&quot;</span>
-        <span class="ident">precedence_expo_plus</span>:    <span class="string">&quot;1 + 2 ^ 3&quot;</span>
-        <span class="ident">precedence_plus_exp</span>:     <span class="string">&quot;1 ^ 2 + 3&quot;</span>
-        <span class="ident">precedence_expo_times</span>:   <span class="string">&quot;1 * 2 ^ 3&quot;</span>
-        <span class="ident">precedence_time_expo</span>:    <span class="string">&quot;1 ^ 2 * 3&quot;</span>
-        <span class="ident">parentheses_plus_times</span>:  <span class="string">&quot;(1 + 2) * 3&quot;</span>
-        <span class="ident">parentheses_time_plus</span>:   <span class="string">&quot;3 * (1 + 2)&quot;</span>
-        <span class="ident">parentheses_time_mod</span>:    <span class="string">&quot;3 * (2 % 2)&quot;</span>
-        <span class="ident">parentheses_mod_time</span>:    <span class="string">&quot;(2 % 2) * 3&quot;</span>
-        <span class="ident">parentheses_exp_time</span>:    <span class="string">&quot;2 ^ (3 ^ 4 * 5)&quot;</span>
-        <span class="ident">parentheses_unary</span>:       <span class="string">&quot;-(2 + +-5)&quot;</span>
-        <span class="ident">nested_parentheses</span>:      <span class="string">&quot;((1 * (2 + 3)) ^ 4)&quot;</span>
-        <span class="ident">brackets_plus_times</span>:     <span class="string">&quot;[1 + 2] * 3&quot;</span>
-        <span class="ident">brackets_time_plus</span>:      <span class="string">&quot;3 * [1 + 2]&quot;</span>
-        <span class="ident">brackets_time_mod</span>:       <span class="string">&quot;3 * [2 % 2]&quot;</span>
-        <span class="ident">brackets_mod_time</span>:       <span class="string">&quot;[2 % 2] * 3&quot;</span>
-        <span class="ident">brackets_exp_time</span>:       <span class="string">&quot;2 ^ [3 ^ 4 * 5]&quot;</span>
-        <span class="ident">brackets_unary</span>:          <span class="string">&quot;-[2 + +-5]&quot;</span>
-        <span class="ident">nested_brackets</span>:         <span class="string">&quot;[[1 * [2 + 3]] ^ 4]&quot;</span>
-        <span class="ident">unary_minus</span>:             <span class="string">&quot;-2&quot;</span>
-        <span class="ident">unary_with_plus</span>:         <span class="string">&quot;-2 + 3&quot;</span>
-        <span class="ident">unary_with_expo</span>:         <span class="string">&quot;-2 ^ 3 =&gt; -(2 ^ 3)&quot;</span>
-        <span class="ident">unary_quad</span>:              <span class="string">&quot;+-+-2&quot;</span>
+        <span class="ident">addition</span>:                               <span class="string">&quot;2 + 2&quot;</span>
+        <span class="ident">addition_nested</span>:                        <span class="string">&quot;1 + 2 + 3&quot;</span>
+        <span class="ident">addition_sub_nested</span>:                    <span class="string">&quot;1 + 2 - 3&quot;</span>
+        <span class="ident">subtraction</span>:                            <span class="string">&quot;2 - 2&quot;</span>
+        <span class="ident">subtraction_nested</span>:                     <span class="string">&quot;1 - 2 - 3&quot;</span>
+        <span class="ident">subtraction_add_nested</span>:                 <span class="string">&quot;1 - 2 + 3&quot;</span>
+        <span class="ident">multiplication</span>:                         <span class="string">&quot;2 * 2&quot;</span>
+        <span class="ident">multiplication_nested</span>:                  <span class="string">&quot;1 * 2 * 3&quot;</span>
+        <span class="ident">division</span>:                               <span class="string">&quot;2 / 2&quot;</span>
+        <span class="ident">division_nested</span>:                        <span class="string">&quot;1 / 2 / 3&quot;</span>
+        <span class="ident">modulo</span>:                                 <span class="string">&quot;2 % 5&quot;</span>
+        <span class="ident">modulo_nested</span>:                          <span class="string">&quot;1 % 2 % 3&quot;</span>
+        <span class="ident">exponent</span>:                               <span class="string">&quot;2 ^ 3&quot;</span>
+        <span class="ident">exponent_nested</span>:                        <span class="string">&quot;1 ^ 2 ^ 3&quot;</span>
+        <span class="ident">precedence_plus_times</span>:                  <span class="string">&quot;1 + 2 * 3&quot;</span>
+        <span class="ident">precedence_times_plus</span>:                  <span class="string">&quot;1 * 2 + 3&quot;</span>
+        <span class="ident">precedence_plus_div</span>:                    <span class="string">&quot;1 + 2 / 3&quot;</span>
+        <span class="ident">precedence_div_plus</span>:                    <span class="string">&quot;1 / 2 + 3&quot;</span>
+        <span class="ident">precedence_plus_mod</span>:                    <span class="string">&quot;1 + 2 % 3&quot;</span>
+        <span class="ident">precedence_mod_plus</span>:                    <span class="string">&quot;1 % 2 + 3&quot;</span>
+        <span class="ident">precedence_minus_times</span>:                 <span class="string">&quot;1 - 2 * 3&quot;</span>
+        <span class="ident">precedence_times_minus</span>:                 <span class="string">&quot;1 * 2 - 3&quot;</span>
+        <span class="ident">precedence_minus_div</span>:                   <span class="string">&quot;1 - 2 / 3&quot;</span>
+        <span class="ident">precedence_div_minus</span>:                   <span class="string">&quot;1 / 2 - 3&quot;</span>
+        <span class="ident">precedence_minus_mod</span>:                   <span class="string">&quot;1 - 2 % 3&quot;</span>
+        <span class="ident">precedence_mod_minus</span>:                   <span class="string">&quot;1 % 2 - 3&quot;</span>
+        <span class="ident">precedence_expo_plus</span>:                   <span class="string">&quot;1 + 2 ^ 3&quot;</span>
+        <span class="ident">precedence_plus_exp</span>:                    <span class="string">&quot;1 ^ 2 + 3&quot;</span>
+        <span class="ident">precedence_expo_times</span>:                  <span class="string">&quot;1 * 2 ^ 3&quot;</span>
+        <span class="ident">precedence_time_expo</span>:                   <span class="string">&quot;1 ^ 2 * 3&quot;</span>
+        <span class="ident">parentheses_plus_times</span>:                 <span class="string">&quot;(1 + 2) * 3&quot;</span>
+        <span class="ident">parentheses_time_plus</span>:                  <span class="string">&quot;3 * (1 + 2)&quot;</span>
+        <span class="ident">parentheses_time_mod</span>:                   <span class="string">&quot;3 * (2 % 2)&quot;</span>
+        <span class="ident">parentheses_mod_time</span>:                   <span class="string">&quot;(2 % 2) * 3&quot;</span>
+        <span class="ident">parentheses_exp_time</span>:                   <span class="string">&quot;2 ^ (3 ^ 4 * 5)&quot;</span>
+        <span class="ident">parentheses_unary</span>:                      <span class="string">&quot;-(2 + +-5)&quot;</span>
+        <span class="ident">nested_parentheses</span>:                     <span class="string">&quot;((1 * (2 + 3)) ^ 4)&quot;</span>
+        <span class="ident">brackets_plus_times</span>:                    <span class="string">&quot;[1 + 2] * 3&quot;</span>
+        <span class="ident">brackets_time_plus</span>:                     <span class="string">&quot;3 * [1 + 2]&quot;</span>
+        <span class="ident">brackets_time_mod</span>:                      <span class="string">&quot;3 * [2 % 2]&quot;</span>
+        <span class="ident">brackets_mod_time</span>:                      <span class="string">&quot;[2 % 2] * 3&quot;</span>
+        <span class="ident">brackets_exp_time</span>:                      <span class="string">&quot;2 ^ [3 ^ 4 * 5]&quot;</span>
+        <span class="ident">brackets_unary</span>:                         <span class="string">&quot;-[2 + +-5]&quot;</span>
+        <span class="ident">nested_brackets</span>:                        <span class="string">&quot;[[1 * [2 + 3]] ^ 4]&quot;</span>
+        <span class="ident">unary_minus</span>:                            <span class="string">&quot;-2&quot;</span>
+        <span class="ident">unary_quad</span>:                             <span class="string">&quot;+-+-2&quot;</span>
+        <span class="ident">implicit_mult_num_var</span>:                  <span class="string">&quot;2x =&gt; 2 * x&quot;</span>
+        <span class="ident">implicit_mult_num_var_pat</span>:              <span class="string">&quot;2$x =&gt; 2 * $x&quot;</span>
+        <span class="ident">implicit_mult_num_const_pat</span>:            <span class="string">&quot;2#x =&gt; 2 * #x&quot;</span>
+        <span class="ident">implicit_mult_num_any_pat</span>:              <span class="string">&quot;2_x =&gt; 2 * _x&quot;</span>
+        <span class="ident">implicit_mult_num_paren</span>:                <span class="string">&quot;2(1) =&gt; 2 * (1)&quot;</span>
+        <span class="ident">implicit_mult_num_bracket</span>:              <span class="string">&quot;2[1] =&gt; 2 * [1]&quot;</span>
+        <span class="ident">implicit_mult_var_paren</span>:                <span class="string">&quot;x(1) =&gt; x * (1)&quot;</span>
+        <span class="ident">implicit_mult_var_bracket</span>:              <span class="string">&quot;x[1] =&gt; x * [1]&quot;</span>
+        <span class="ident">implicit_mult_var_pat_paren</span>:            <span class="string">&quot;$x(1) =&gt; $x * (1)&quot;</span>
+        <span class="ident">implicit_mult_var_pat_bracket</span>:          <span class="string">&quot;$x[1] =&gt; $x * [1]&quot;</span>
+        <span class="ident">implicit_mult_const_pat_paren</span>:          <span class="string">&quot;$x(1) =&gt; $x * (1)&quot;</span>
+        <span class="ident">implicit_mult_const_pat_bracket</span>:        <span class="string">&quot;$x[1] =&gt; $x * [1]&quot;</span>
+        <span class="ident">implicit_mult_any_pat_paren</span>:            <span class="string">&quot;_x(1) =&gt; _x * (1)&quot;</span>
+        <span class="ident">implicit_mult_any_pat_bracket</span>:          <span class="string">&quot;_x[1] =&gt; _x * [1]&quot;</span>
+        <span class="ident">implicit_mult_paren_paren</span>:              <span class="string">&quot;(1)(2) =&gt; (1) * (2)&quot;</span>
+        <span class="ident">implicit_mult_paren_bracket</span>:            <span class="string">&quot;(1)[2] =&gt; (1) * [2]&quot;</span>
+        <span class="ident">implicit_mult_bracket_paren</span>:            <span class="string">&quot;[1](2) =&gt; [1] * (2)&quot;</span>
+        <span class="ident">implicit_mult_bracket_bracket</span>:          <span class="string">&quot;[1][2] =&gt; [1] * [2]&quot;</span>
+        <span class="ident">implicit_mult_unary_paren</span>:              <span class="string">&quot;-1(2) =&gt; -1 * (2)&quot;</span>
+        <span class="ident">implicit_mult_unary_bracket</span>:            <span class="string">&quot;-1[2] =&gt; -1 * [2]&quot;</span>
+        <span class="ident">implicit_mult_unary_nested_var</span>:         <span class="string">&quot;-2x =&gt; -2 * x&quot;</span>
+        <span class="ident">implicit_mult_exp</span>:                      <span class="string">&quot;2x^5 =&gt; 2 * x ^ 5&quot;</span>
     }
 }
 </pre></div>

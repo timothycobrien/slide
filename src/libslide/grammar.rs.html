@@ -296,6 +296,12 @@
 <span id="296">296</span>
 <span id="297">297</span>
 <span id="298">298</span>
+<span id="299">299</span>
+<span id="300">300</span>
+<span id="301">301</span>
+<span id="302">302</span>
+<span id="303">303</span>
+<span id="304">304</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="kw">mod</span> <span class="ident">pattern</span>;
 <span class="kw">mod</span> <span class="ident">transformer</span>;
@@ -314,6 +320,7 @@
 <span class="kw">where</span>
     <span class="self">Self</span>: <span class="ident">fmt</span>::<span class="ident">Display</span> <span class="op">+</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">BinaryExpr</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">UnaryExpr</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span><span class="op">&gt;</span>,
 {
+    <span class="kw">fn</span> <span class="ident">is_const</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span>;
 }
 
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>)]</span>
@@ -397,7 +404,12 @@
 
 <span class="kw">impl</span> <span class="ident">Grammar</span> <span class="kw">for</span> <span class="ident">Expr</span> {}
 <span class="kw">impl</span> <span class="ident">Grammar</span> <span class="kw">for</span> <span class="ident">Rc</span><span class="op">&lt;</span><span class="ident">Expr</span><span class="op">&gt;</span> {}
-<span class="kw">impl</span> <span class="ident">Expression</span> <span class="kw">for</span> <span class="ident">Expr</span> {}
+<span class="kw">impl</span> <span class="ident">Expression</span> <span class="kw">for</span> <span class="ident">Expr</span> {
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
+    <span class="kw">fn</span> <span class="ident">is_const</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
+        <span class="macro">matches</span><span class="macro">!</span>(<span class="self">self</span>, <span class="self">Self</span>::<span class="ident">Const</span>(<span class="kw">_</span>))
+    }
+}
 
 <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">f64</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Expr</span> {
     <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">f</span>: <span class="ident">f64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {

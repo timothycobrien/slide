@@ -90,6 +90,11 @@
 <span id="90">90</span>
 <span id="91">91</span>
 <span id="92">92</span>
+<span id="93">93</span>
+<span id="94">94</span>
+<span id="95">95</span>
+<span id="96">96</span>
+<span id="97">97</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="kw">pub</span> <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
 
@@ -112,7 +117,12 @@
 
 <span class="kw">impl</span> <span class="ident">Grammar</span> <span class="kw">for</span> <span class="ident">ExprPat</span> {}
 <span class="kw">impl</span> <span class="ident">Grammar</span> <span class="kw">for</span> <span class="ident">Rc</span><span class="op">&lt;</span><span class="ident">ExprPat</span><span class="op">&gt;</span> {}
-<span class="kw">impl</span> <span class="ident">Expression</span> <span class="kw">for</span> <span class="ident">ExprPat</span> {}
+<span class="kw">impl</span> <span class="ident">Expression</span> <span class="kw">for</span> <span class="ident">ExprPat</span> {
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
+    <span class="kw">fn</span> <span class="ident">is_const</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
+        <span class="macro">matches</span><span class="macro">!</span>(<span class="self">self</span>, <span class="self">Self</span>::<span class="ident">Const</span>(<span class="kw">_</span>))
+    }
+}
 
 <span class="comment">// TODO: We can&#39;t derive this because `f64` doesn&#39;t implement `Eq`.</span>
 <span class="comment">// This should be fixed by moving to a arbitrary-precision numeric type.</span>

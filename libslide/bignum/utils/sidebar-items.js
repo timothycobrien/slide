@@ -1,1 +1,1 @@
-initSidebarItems({"fn":[["abs",""],["recast_vec",""]]});
+initSidebarItems({"fn":[["abs",""],["fft",""],["ifft",""],["recast_vec",""]]});

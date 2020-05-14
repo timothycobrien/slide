@@ -1,0 +1,1 @@
+initSidebarItems({"enum":[["Rule",""]],"struct":[["PatternMap","A mapping between two expression patterns."]]});

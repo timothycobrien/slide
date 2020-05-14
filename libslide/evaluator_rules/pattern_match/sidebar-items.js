@@ -1,0 +1,1 @@
+initSidebarItems({"fn":[["match_rule","Pattern matches a rule template against an expression. If successful, the results of the matching are returned as a mapping of rule to target expressions replacements."]],"struct":[["Replacements","Represents pattern-matched replacements betwen a rule and a target expression."]]});

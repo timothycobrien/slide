@@ -1,0 +1,1 @@
+initSidebarItems({"fn":[["evaluate","Evaluates an expression to as simplified a form as possible. The evaluation may be partial, as some values (like variables) may be unknown."]],"mod":[["types",""]]});

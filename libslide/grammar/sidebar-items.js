@@ -1,0 +1,1 @@
+initSidebarItems({"enum":[["BinaryOperator",""],["Expr",""],["Stmt",""],["UnaryOperator",""]],"mod":[["pattern",""],["transformer",""]],"struct":[["Assignment",""],["BinaryExpr",""],["UnaryExpr",""]],"trait":[["Expression",""],["Grammar",""]]});

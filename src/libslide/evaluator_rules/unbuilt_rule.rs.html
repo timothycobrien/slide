@@ -40,9 +40,6 @@
 <span id="40">40</span>
 <span id="41">41</span>
 <span id="42">42</span>
-<span id="43">43</span>
-<span id="44">44</span>
-<span id="45">45</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">grammar</span>::<span class="ident">Expr</span>;
 
@@ -82,9 +79,6 @@
     <span class="doccomment">/// rather than the string representations of expressions. This ensures rule application is</span>
     <span class="doccomment">/// always exact and deterministic.</span>
     <span class="ident">S</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span>),
-
-    <span class="doccomment">/// Multiple expression mappings representing one rule, perhaps in several different ways.</span>
-    <span class="ident">M</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> [<span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span>]),
 
     <span class="doccomment">/// A function rule.</span>
     <span class="ident">F</span>(<span class="kw">fn</span>(<span class="kw-2">&amp;</span><span class="ident">Expr</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Expr</span><span class="op">&gt;</span>),

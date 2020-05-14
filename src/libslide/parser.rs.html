@@ -173,7 +173,6 @@
 <span id="173">173</span>
 <span id="174">174</span>
 <span id="175">175</span>
-<span id="176">176</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="attribute">#[<span class="ident">macro_use</span>]</span>
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">test_utils</span>; <span class="comment">// this **must** be first since macro import order matters!</span>
@@ -284,9 +283,6 @@
             <span class="prelude-val">Some</span>(<span class="ident">TokenType</span>::<span class="ident">Float</span>(<span class="ident">f</span>)) <span class="op">=</span><span class="op">&gt;</span> <span class="self">self</span>.<span class="ident">parse_float</span>(<span class="ident">f</span>),
             <span class="prelude-val">Some</span>(<span class="ident">TokenType</span>::<span class="ident">Variable</span>(<span class="ident">name</span>)) <span class="op">=</span><span class="op">&gt;</span> <span class="self">self</span>.<span class="ident">parse_variable</span>(<span class="ident">name</span>),
 
-            <span class="comment">// TODO: Currently patterns as all parsed as variables. Maybe there is a nice way to</span>
-            <span class="comment">// store pattern information during parsing, but this would require some extension of</span>
-            <span class="comment">// the grammar.</span>
             <span class="prelude-val">Some</span>(<span class="ident">TokenType</span>::<span class="ident">VariablePattern</span>(<span class="ident">name</span>)) <span class="op">=</span><span class="op">&gt;</span> <span class="self">self</span>.<span class="ident">parse_var_pattern</span>(<span class="ident">name</span>),
             <span class="prelude-val">Some</span>(<span class="ident">TokenType</span>::<span class="ident">ConstPattern</span>(<span class="ident">name</span>)) <span class="op">=</span><span class="op">&gt;</span> <span class="self">self</span>.<span class="ident">parse_const_pattern</span>(<span class="ident">name</span>),
             <span class="prelude-val">Some</span>(<span class="ident">TokenType</span>::<span class="ident">AnyPattern</span>(<span class="ident">name</span>)) <span class="op">=</span><span class="op">&gt;</span> <span class="self">self</span>.<span class="ident">parse_any_pattern</span>(<span class="ident">name</span>),
@@ -305,8 +301,10 @@
     <span class="macro">common_parser_tests</span><span class="macro">!</span> {
         <span class="ident">addition</span>:                <span class="string">&quot;2 + 2&quot;</span>
         <span class="ident">addition_nested</span>:         <span class="string">&quot;1 + 2 + 3&quot;</span>
+        <span class="ident">addition_sub_nested</span>:     <span class="string">&quot;1 + 2 - 3&quot;</span>
         <span class="ident">subtraction</span>:             <span class="string">&quot;2 - 2&quot;</span>
         <span class="ident">subtraction_nested</span>:      <span class="string">&quot;1 - 2 - 3&quot;</span>
+        <span class="ident">subtraction_add_nested</span>:  <span class="string">&quot;1 - 2 + 3&quot;</span>
         <span class="ident">multiplication</span>:          <span class="string">&quot;2 * 2&quot;</span>
         <span class="ident">multiplication_nested</span>:   <span class="string">&quot;1 * 2 * 3&quot;</span>
         <span class="ident">division</span>:                <span class="string">&quot;2 / 2&quot;</span>
@@ -338,7 +336,6 @@
         <span class="ident">parentheses_exp_time</span>:    <span class="string">&quot;2 ^ (3 ^ 4 * 5)&quot;</span>
         <span class="ident">parentheses_unary</span>:       <span class="string">&quot;-(2 + +-5)&quot;</span>
         <span class="ident">nested_parentheses</span>:      <span class="string">&quot;((1 * (2 + 3)) ^ 4)&quot;</span>
-        <span class="ident">bracket1</span>: <span class="string">&quot;[1 + 2]&quot;</span>
         <span class="ident">brackets_plus_times</span>:     <span class="string">&quot;[1 + 2] * 3&quot;</span>
         <span class="ident">brackets_time_plus</span>:      <span class="string">&quot;3 * [1 + 2]&quot;</span>
         <span class="ident">brackets_time_mod</span>:       <span class="string">&quot;3 * [2 % 2]&quot;</span>
@@ -347,7 +344,8 @@
         <span class="ident">brackets_unary</span>:          <span class="string">&quot;-[2 + +-5]&quot;</span>
         <span class="ident">nested_brackets</span>:         <span class="string">&quot;[[1 * [2 + 3]] ^ 4]&quot;</span>
         <span class="ident">unary_minus</span>:             <span class="string">&quot;-2&quot;</span>
-        <span class="ident">unary_expo</span>:              <span class="string">&quot;-2 ^ 3&quot;</span>
+        <span class="ident">unary_with_plus</span>:         <span class="string">&quot;-2 + 3&quot;</span>
+        <span class="ident">unary_with_expo</span>:         <span class="string">&quot;-2 ^ 3 =&gt; -(2 ^ 3)&quot;</span>
         <span class="ident">unary_quad</span>:              <span class="string">&quot;+-+-2&quot;</span>
     }
 }

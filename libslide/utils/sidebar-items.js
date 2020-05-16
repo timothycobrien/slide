@@ -1,1 +1,1 @@
-initSidebarItems({"mod":[["hash",""],["iter",""],["string",""]]});
+initSidebarItems({"mod":[["grammar",""],["hash",""],["iter",""],["string",""]]});

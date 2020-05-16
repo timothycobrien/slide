@@ -21,6 +21,7 @@
 <span id="21">21</span>
 <span id="22">22</span>
 <span id="23">23</span>
+<span id="24">24</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="kw">use</span> <span class="ident">libslide</span>::{<span class="ident">evaluate</span>, <span class="ident">parse_expression</span>, <span class="ident">scan</span>, <span class="ident">EvaluatorContext</span>};
 
@@ -39,7 +40,8 @@
     <span class="kw">if</span> <span class="op">!</span><span class="ident">errors</span>.<span class="ident">is_empty</span>() {
         <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">errors</span>.<span class="ident">join</span>(<span class="string">&quot;\n&quot;</span>));
     }
-    <span class="kw">let</span> <span class="ident">simplified</span> <span class="op">=</span> <span class="ident">evaluate</span>(<span class="ident">parse_tree</span>, <span class="ident">EvaluatorContext</span>::<span class="ident">default</span>());
+    <span class="comment">// TODO: handle errors</span>
+    <span class="kw">let</span> <span class="ident">simplified</span> <span class="op">=</span> <span class="ident">evaluate</span>(<span class="ident">parse_tree</span>, <span class="ident">EvaluatorContext</span>::<span class="ident">default</span>()).<span class="ident">unwrap</span>();
 
     <span class="macro">println</span><span class="macro">!</span>(<span class="string">&quot;{}&quot;</span>, <span class="ident">simplified</span>.<span class="ident">to_string</span>());
 

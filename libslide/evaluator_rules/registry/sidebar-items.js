@@ -1,1 +1,1 @@
-initSidebarItems({"enum":[["RuleName",""]],"fn":[["get_all_rules",""]],"mod":[["fn_rules",""]],"struct":[["RuleSet","Set of unbuilt rules."]]});
+initSidebarItems({"enum":[["RuleName",""]],"fn":[["get_all_rules",""]],"mod":[["fn_rules",""]],"struct":[["BuildRuleErrors",""],["RuleSet","Set of unbuilt rules."]]});

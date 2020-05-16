@@ -609,8 +609,8 @@
                         <span class="prelude-val">Some</span>(<span class="ident">transformed</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Rc</span>::<span class="ident">clone</span>(<span class="ident">transformed</span>),
 
                         <span class="comment">// A pattern can only be transformed into an expression if it has an</span>
-                        <span class="comment">// expression replacement.</span>
-                        <span class="comment">// TODO: Return an error rather than panicking</span>
+                        <span class="comment">// expression replacement. Patterns are be validated before transformation,</span>
+                        <span class="comment">// so this branch should never be hit.</span>
                         <span class="prelude-val">None</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">unreachable</span><span class="macro">!</span>(),
                     }
                 }

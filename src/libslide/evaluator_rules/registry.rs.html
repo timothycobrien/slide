@@ -209,6 +209,7 @@
 <span id="209">209</span>
 <span id="210">210</span>
 <span id="211">211</span>
+<span id="212">212</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="kw">mod</span> <span class="ident">fn_rules</span>;
 
@@ -247,6 +248,7 @@
                          <span class="ident">Posate</span>: <span class="ident">F</span>(<span class="ident">posate</span>)
                          <span class="ident">Negate</span>: <span class="ident">F</span>(<span class="ident">negate</span>)
                <span class="ident">AdditiveIdentity</span>: <span class="ident">S</span>(<span class="string">&quot;_a + 0 -&gt; _a&quot;</span>)
+                <span class="ident">AdditiveInverse</span>: <span class="ident">S</span>(<span class="string">&quot;_a - _a -&gt; 0&quot;</span>)
                <span class="ident">ReorderConstants</span>: <span class="ident">S</span>(<span class="string">&quot;#a + $b -&gt; $b + #a&quot;</span>)
              <span class="ident">DistributeNegation</span>: <span class="ident">S</span>(<span class="string">&quot;-(_a - _b) -&gt; _b - _a&quot;</span>)
            <span class="ident">UnwrapExplicitParens</span>: <span class="ident">S</span>(<span class="string">&quot;(_a) -&gt; _a&quot;</span>)

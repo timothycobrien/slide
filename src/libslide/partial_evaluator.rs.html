@@ -253,7 +253,7 @@
         <span class="ident">reorder_constants_nested_right</span>: <span class="string">&quot;1 + 2 + a&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;a + 3&quot;</span>
 
         <span class="ident">distribute_negation</span>:            <span class="string">&quot;-(a - b)&quot;</span>     <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;b - a&quot;</span>
-        <span class="ident">distribute_negation_nested</span>:     <span class="string">&quot;1 + -(a - b)&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;1 + b - a&quot;</span>
+        <span class="ident">distribute_negation_nested</span>:     <span class="string">&quot;1 + -(a - b)&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;b - a + 1&quot;</span>
         <span class="ident">distribute_negation_with_eval</span>:  <span class="string">&quot;1 + -(2 - 3)&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;2&quot;</span>
 
         <span class="ident">unwrap_parens_const</span>:            <span class="string">&quot;(1)&quot;</span>       <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;1&quot;</span>

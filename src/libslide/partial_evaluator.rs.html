@@ -135,13 +135,15 @@
 <span id="135">135</span>
 <span id="136">136</span>
 <span id="137">137</span>
+<span id="138">138</span>
+<span id="139">139</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="kw">mod</span> <span class="ident">types</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">types</span>::<span class="kw-2">*</span>;
 
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">evaluator_rules</span>::<span class="ident">RuleSet</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">grammar</span>::<span class="kw-2">*</span>;
-<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">utils</span>::<span class="ident">hash</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">utils</span>::{<span class="ident">hash</span>, <span class="ident">normalize</span>};
 
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">collections</span>::<span class="ident">HashSet</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">error</span>::<span class="ident">Error</span>;
@@ -173,7 +175,7 @@
         <span class="ident">expr_hash</span> <span class="op">=</span> <span class="ident">hash</span>(<span class="kw-2">&amp;</span><span class="ident">simplified_expr</span>);
     }
 
-    <span class="prelude-val">Ok</span>((<span class="kw-2">*</span><span class="ident">simplified_expr</span>).<span class="ident">clone</span>())
+    <span class="prelude-val">Ok</span>(<span class="ident">normalize</span>(<span class="ident">simplified_expr</span>).<span class="ident">as_ref</span>().<span class="ident">clone</span>())
 }
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
@@ -213,7 +215,7 @@
         <span class="ident">sub_nested_left</span>:                <span class="string">&quot;1 - 2 - a&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;-1 - a&quot;</span>
 
         <span class="ident">mult</span>:                           <span class="string">&quot;2 * 3&quot;</span>     <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;6&quot;</span>
-        <span class="ident">mult_nested_left</span>:               <span class="string">&quot;2 * 3 * a&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;6 * a&quot;</span>
+        <span class="ident">mult_nested_left</span>:               <span class="string">&quot;2 * 3 * a&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;a * 6&quot;</span>
 
         <span class="ident">div</span>:                            <span class="string">&quot;6 / 2&quot;</span>     <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;3&quot;</span>
         <span class="ident">div_nested_left</span>:                <span class="string">&quot;6 / 2 / a&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;3 / a&quot;</span>
@@ -253,7 +255,7 @@
         <span class="ident">reorder_constants_nested_right</span>: <span class="string">&quot;1 + 2 + a&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;a + 3&quot;</span>
 
         <span class="ident">distribute_negation</span>:            <span class="string">&quot;-(a - b)&quot;</span>     <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;b - a&quot;</span>
-        <span class="ident">distribute_negation_nested</span>:     <span class="string">&quot;1 + -(a - b)&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;b - a + 1&quot;</span>
+        <span class="ident">distribute_negation_nested</span>:     <span class="string">&quot;1 + -(a - b)&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;b + 1 - a&quot;</span>
         <span class="ident">distribute_negation_with_eval</span>:  <span class="string">&quot;1 + -(2 - 3)&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;2&quot;</span>
 
         <span class="ident">unwrap_parens_const</span>:            <span class="string">&quot;(1)&quot;</span>       <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;1&quot;</span>
@@ -263,6 +265,8 @@
         <span class="ident">unwrap_braces_const</span>:            <span class="string">&quot;[1]&quot;</span>       <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;1&quot;</span>
         <span class="ident">unwrap_braces_var</span>:              <span class="string">&quot;[a]&quot;</span>       <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;a&quot;</span>
         <span class="ident">unwrap_braces_nested</span>:           <span class="string">&quot;[a] + [1]&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;a + 1&quot;</span>
+
+        <span class="ident">flattened_addition</span>:             <span class="string">&quot;1 + 2 - b + 3 - b&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;6 - b - b&quot;</span>
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>

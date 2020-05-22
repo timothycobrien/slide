@@ -16,6 +16,10 @@
 <span id="16">16</span>
 <span id="17">17</span>
 <span id="18">18</span>
+<span id="19">19</span>
+<span id="20">20</span>
+<span id="21">21</span>
+<span id="22">22</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="kw">mod</span> <span class="ident">bignum</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">bignum</span>::<span class="ident">Bignum</span>;
@@ -33,6 +37,10 @@
 
 <span class="kw">mod</span> <span class="ident">evaluator_rules</span>;
 <span class="kw">mod</span> <span class="ident">grammar</span>;
+<span class="kw">mod</span> <span class="ident">math</span>;
+
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;benchmark-internals&quot;</span>)]</span>
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">math</span>::<span class="kw-2">*</span>;
 
 <span class="kw">mod</span> <span class="ident">utils</span>;
 </pre></div>

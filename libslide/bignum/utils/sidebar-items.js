@@ -1,1 +1,1 @@
-initSidebarItems({"fn":[["abs",""],["fft",""],["ifft",""],["recast_vec",""]]});
+initSidebarItems({"constant":[["TOLERANCE",""]],"fn":[["abs",""],["convert_poly",""],["fft",""],["ifft",""],["ispowerof2",""],["normalize_vecs",""],["recast_user_vec",""],["recast_vec",""],["truncate_zeros",""]],"static":[["ERR_MSG",""]]});

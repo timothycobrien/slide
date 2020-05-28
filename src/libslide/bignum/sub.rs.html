@@ -136,47 +136,12 @@
 <span id="136">136</span>
 <span id="137">137</span>
 <span id="138">138</span>
-<span id="139">139</span>
-<span id="140">140</span>
-<span id="141">141</span>
-<span id="142">142</span>
-<span id="143">143</span>
-<span id="144">144</span>
-<span id="145">145</span>
-<span id="146">146</span>
-<span id="147">147</span>
-<span id="148">148</span>
-<span id="149">149</span>
-<span id="150">150</span>
-<span id="151">151</span>
-<span id="152">152</span>
-<span id="153">153</span>
-<span id="154">154</span>
-<span id="155">155</span>
-<span id="156">156</span>
-<span id="157">157</span>
-<span id="158">158</span>
-<span id="159">159</span>
-<span id="160">160</span>
-<span id="161">161</span>
-<span id="162">162</span>
-<span id="163">163</span>
-<span id="164">164</span>
-<span id="165">165</span>
-<span id="166">166</span>
-<span id="167">167</span>
-<span id="168">168</span>
-<span id="169">169</span>
-<span id="170">170</span>
-<span id="171">171</span>
-<span id="172">172</span>
-<span id="173">173</span>
-<span id="174">174</span>
-<span id="175">175</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="attribute">#![<span class="ident">allow</span>(<span class="ident">clippy</span>::<span class="ident">suspicious_arithmetic_impl</span>)]</span>
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">bignum</span>::<span class="ident">utils</span>::<span class="ident">abs</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">bignum</span>::<span class="ident">utils</span>::<span class="ident">normalize_vecs</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">bignum</span>::<span class="ident">utils</span>::<span class="ident">recast_vec</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">bignum</span>::<span class="ident">utils</span>::<span class="ident">truncate_zeros</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">bignum</span>::<span class="ident">Bignum</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">ops</span>;
 
@@ -209,30 +174,13 @@
 
         <span class="comment">// make the decimal vectors the same size</span>
         <span class="comment">// fill lhs and rhs vectors as well</span>
-        <span class="kw">let</span> <span class="ident">self_size</span>: <span class="ident">usize</span> <span class="op">=</span> <span class="ident">lhs</span>.<span class="ident">dec</span>.<span class="ident">len</span>();
-        <span class="kw">let</span> <span class="ident">other_size</span>: <span class="ident">usize</span> <span class="op">=</span> <span class="ident">rhs</span>.<span class="ident">dec</span>.<span class="ident">len</span>();
-        <span class="kw">let</span> (<span class="kw-2">mut</span> <span class="ident">res_int</span>, <span class="ident">lhs_int</span>, <span class="kw-2">mut</span> <span class="ident">res_dec</span>, <span class="ident">lhs_dec</span>): (<span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">i8</span><span class="op">&gt;</span>, <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">i8</span><span class="op">&gt;</span>, <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">i8</span><span class="op">&gt;</span>, <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">i8</span><span class="op">&gt;</span>) <span class="op">=</span>
-            <span class="kw">if</span> <span class="ident">self_size</span> <span class="op">&gt;</span> <span class="ident">other_size</span> {
-                <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">equal_dec</span> <span class="op">=</span> <span class="macro">vec</span><span class="macro">!</span>[<span class="number">0</span>; <span class="ident">self_size</span>];
-                <span class="ident">equal_dec</span>[..<span class="ident">other_size</span>].<span class="ident">clone_from_slice</span>(<span class="kw-2">&amp;</span><span class="ident">rhs</span>.<span class="ident">dec</span>[..<span class="ident">other_size</span>]);
-                (
-                    <span class="ident">recast_vec</span>(<span class="ident">rhs</span>.<span class="ident">int</span>),
-                    <span class="ident">recast_vec</span>(<span class="ident">lhs</span>.<span class="ident">int</span>),
-                    <span class="ident">recast_vec</span>(<span class="ident">equal_dec</span>),
-                    <span class="ident">recast_vec</span>(<span class="ident">lhs</span>.<span class="ident">dec</span>),
-                )
-            } <span class="kw">else</span> {
-                <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">equal_dec</span> <span class="op">=</span> <span class="macro">vec</span><span class="macro">!</span>[<span class="number">0</span>; <span class="ident">other_size</span>];
-                <span class="ident">equal_dec</span>[..<span class="ident">self_size</span>].<span class="ident">clone_from_slice</span>(<span class="kw-2">&amp;</span><span class="ident">lhs</span>.<span class="ident">dec</span>[..<span class="ident">self_size</span>]);
-                (
-                    <span class="ident">recast_vec</span>(<span class="ident">rhs</span>.<span class="ident">int</span>),
-                    <span class="ident">recast_vec</span>(<span class="ident">lhs</span>.<span class="ident">int</span>),
-                    <span class="ident">recast_vec</span>(<span class="ident">rhs</span>.<span class="ident">dec</span>),
-                    <span class="ident">recast_vec</span>(<span class="ident">equal_dec</span>),
-                )
-            };
-
-        <span class="comment">// now we need to make the bigger number the res dec</span>
+        <span class="kw">let</span> (<span class="ident">res_dec_equal</span>, <span class="ident">lhs_dec_equal</span>) <span class="op">=</span> <span class="ident">normalize_vecs</span>(<span class="ident">rhs</span>.<span class="ident">dec</span>, <span class="ident">lhs</span>.<span class="ident">dec</span>);
+        <span class="kw">let</span> (<span class="kw-2">mut</span> <span class="ident">res_int</span>, <span class="ident">lhs_int</span>, <span class="kw-2">mut</span> <span class="ident">res_dec</span>, <span class="ident">lhs_dec</span>): (<span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">i8</span><span class="op">&gt;</span>, <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">i8</span><span class="op">&gt;</span>, <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">i8</span><span class="op">&gt;</span>, <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">i8</span><span class="op">&gt;</span>) <span class="op">=</span> (
+            <span class="ident">recast_vec</span>(<span class="ident">rhs</span>.<span class="ident">int</span>),
+            <span class="ident">recast_vec</span>(<span class="ident">lhs</span>.<span class="ident">int</span>),
+            <span class="ident">recast_vec</span>(<span class="ident">res_dec_equal</span>),
+            <span class="ident">recast_vec</span>(<span class="ident">lhs_dec_equal</span>),
+        );
         <span class="comment">// 1. Decimal</span>
 
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">res</span>: <span class="ident">i8</span>;
@@ -263,37 +211,15 @@
         }
 
         <span class="comment">// remove preceeding zeros</span>
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">count</span> <span class="op">=</span> <span class="number">0</span>;
-        <span class="kw">for</span> <span class="ident">i</span> <span class="kw">in</span> (<span class="number">0</span>..<span class="ident">res_int</span>.<span class="ident">len</span>()).<span class="ident">rev</span>() {
-            <span class="kw">if</span> <span class="ident">res_int</span>[<span class="ident">i</span>] <span class="op">=</span><span class="op">=</span> <span class="number">0</span> {
-                <span class="ident">count</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
-            } <span class="kw">else</span> {
-                <span class="kw">break</span>;
-            }
-        }
-
-        <span class="ident">res_int</span>.<span class="ident">truncate</span>(<span class="ident">res_int</span>.<span class="ident">len</span>() <span class="op">-</span> <span class="ident">count</span>);
-
-        <span class="ident">count</span> <span class="op">=</span> <span class="number">0</span>;
-        <span class="kw">for</span> <span class="ident">i</span> <span class="kw">in</span> (<span class="number">0</span>..<span class="ident">res_dec</span>.<span class="ident">len</span>()).<span class="ident">rev</span>() {
-            <span class="kw">if</span> <span class="ident">res_dec</span>[<span class="ident">i</span>] <span class="op">=</span><span class="op">=</span> <span class="number">0</span> {
-                <span class="ident">count</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
-            } <span class="kw">else</span> {
-                <span class="kw">break</span>;
-            }
-        }
-        <span class="ident">res_dec</span>.<span class="ident">truncate</span>(<span class="ident">res_dec</span>.<span class="ident">len</span>() <span class="op">-</span> <span class="ident">count</span>);
+        <span class="kw">let</span> <span class="ident">int</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">truncate_zeros</span>(<span class="ident">recast_vec</span>(<span class="ident">res_int</span>));
+        <span class="kw">let</span> <span class="ident">dec</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">truncate_zeros</span>(<span class="ident">recast_vec</span>(<span class="ident">res_dec</span>));
 
         <span class="comment">// quick optimization to remove -0 from possible results.</span>
-        <span class="kw">if</span> <span class="ident">is_neg</span> <span class="kw-2">&amp;</span><span class="op">&amp;</span> <span class="ident">res_int</span>.<span class="ident">is_empty</span>() <span class="kw-2">&amp;</span><span class="op">&amp;</span> <span class="ident">res_dec</span>.<span class="ident">is_empty</span>() {
+        <span class="kw">if</span> <span class="ident">is_neg</span> <span class="kw-2">&amp;</span><span class="op">&amp;</span> <span class="ident">int</span>.<span class="ident">is_empty</span>() <span class="kw-2">&amp;</span><span class="op">&amp;</span> <span class="ident">dec</span>.<span class="ident">is_empty</span>() {
             <span class="ident">is_neg</span> <span class="op">=</span> <span class="bool-val">false</span>;
         }
 
-        <span class="ident">Bignum</span> {
-            <span class="ident">is_neg</span>,
-            <span class="ident">dec</span>: <span class="ident">recast_vec</span>(<span class="ident">res_dec</span>),
-            <span class="ident">int</span>: <span class="ident">recast_vec</span>(<span class="ident">res_int</span>),
-        }
+        <span class="ident">Bignum</span> { <span class="ident">is_neg</span>, <span class="ident">dec</span>, <span class="ident">int</span> }
     }
 }
 

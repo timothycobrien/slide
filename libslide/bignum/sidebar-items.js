@@ -1,1 +1,1 @@
-initSidebarItems({"fn":[["to_char",""],["to_u8",""]],"mod":[["add",""],["compare",""],["complex",""],["negate",""],["sub",""],["utils",""]],"static":[["INPUT_ERR_MSG",""]],"struct":[["Bignum",""]]});
+initSidebarItems({"fn":[["to_char",""],["to_u8",""]],"mod":[["add",""],["compare",""],["complex",""],["mul",""],["negate",""],["sub",""],["utils",""]],"static":[["INPUT_ERR_MSG",""]],"struct":[["Bignum",""]]});

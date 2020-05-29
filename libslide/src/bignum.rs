@@ -2,6 +2,7 @@ use std::fmt;
 mod add;
 mod compare;
 mod complex;
+mod mul;
 mod negate;
 mod sub;
 mod utils;
@@ -59,6 +60,9 @@ impl Bignum {
             } else {
                 return Err(INPUT_ERR_MSG);
             }
+        }
+        if !dec.is_empty() && dec.iter().all(|&i| i == 0) {
+            dec.clear();
         }
         Ok(Bignum {
             is_neg,

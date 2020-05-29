@@ -7,6 +7,8 @@ mod mul;
 mod negate;
 mod sub;
 mod utils;
+mod divide;
+mod modulo;
 
 pub use modulo::*;
 pub use utils::truncate_zeros;

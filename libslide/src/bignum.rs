@@ -5,6 +5,8 @@ mod complex;
 mod negate;
 mod sub;
 mod utils;
+mod divide;
+mod modulo;
 
 // this probably can go in utils but I put it in here for now
 fn to_u8(c: char) -> u8 {

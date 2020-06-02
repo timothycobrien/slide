@@ -28,14 +28,16 @@ impl ops::Mul for Bignum {
             rhs_int.push(0);
             lhs_int.push(0);
         }
-        while !ispowerof2(rhs_int.len() + rhs_dec.len()) {
+        while !ispowerof2(rhs_int.len() + rhs_dec.len()) || rhs_int.len() <=2 {
             rhs_int.push(0);
             lhs_int.push(0);
         }
         rhs_dec = rhs_dec.into_iter().rev().collect();
         lhs_dec = lhs_dec.into_iter().rev().collect();
+        println!("rhs:{} -- lhs:{}", rhs_dec.len(), lhs_dec.len());
         rhs_dec.append(&mut rhs_int);
         lhs_dec.append(&mut lhs_int);
+        println!("rhs:{} -- lhs:{}", rhs_dec.len(), lhs_dec.len());
         let rhs_len = rhs_dec.len();
         let rhs_cplx = recast_user_vec(rhs_dec).unwrap();
         let lhs_cplx = recast_user_vec(lhs_dec).unwrap();
@@ -45,6 +47,7 @@ impl ops::Mul for Bignum {
         for i in 0..rhs_len {
             rhs_fft[i] = rhs_fft[i] * lhs_fft[i];
         }
+        println!("rhs_fft: {:?} --- rhs_len{}", rhs_fft, rhs_len);
 
         let res: Vec<u16> = recast_user_vec(
             ifft(rhs_fft, rhs_len)
@@ -53,7 +56,9 @@ impl ops::Mul for Bignum {
                 .collect(),
         )
         .unwrap();
+        println!("{}", res.len());
         let mut dec_vec: Vec<u8> = convert_poly(res);
+        println!("dec_vec: {:?} --- dec_len: {} --- dec_vec.len(): {}", dec_vec, dec_len, dec_vec.len());
         let int_vec: Vec<u8> = dec_vec.split_off(dec_len);
 
         // remove preceeding zeros
@@ -98,6 +103,11 @@ mod tests {
             float3: "0.192781230589", "0.12182387511", "0.02348535655882644773979"
             mixed1: "1.0", "1.0", "1"
             mixed2: "12912572835.19235098273", "19325812.193812388322389", "249545957551850939.50568665382187490021134197"
+            mixed3: ".5", "5", "2.5"
+            mixed4: ".5", "5.2", "2.6"
+            mixed5: "100", ".25", "25"
+            mixed6: "200", ".5", "100"
+            mixed7: "0.01", "4.12564388199914384891937474984", ".0412564388199914384891937474984"
             zero1: "0000.00", "0", "0"
             zero2: "0.0000", "0", "0"
             zero3: "0", "0.000", "0"
@@ -105,6 +115,7 @@ mod tests {
             zero5: "-0", "00.00", "0"
             zero6: "0.0000", "-00000.000", "0"
             zero7: "-0.00", "-0000.00", "0"
+            zero8: "0.00", "2.23131442121312311", "0"
             trailing_zero1: "1.00000", "000001.0000", "1"
         }
     }
